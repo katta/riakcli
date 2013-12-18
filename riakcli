@@ -1,0 +1,47 @@
+#! /usr/bin/env sh
+
+RIAK_HOST="localhost"
+RIAK_PORT=8098
+
+BASE_URL="http://${RIAK_HOST}:${RIAK_PORT}"
+
+printUsage() {
+	echo  "\nUsage:"
+	echo  "  riakcli list buckets            -> Lists all the buckets available in riak"
+	echo  "  riakcli help                    -> Displays this usage information"	
+}
+
+printInvalidUsage() {
+	echo "\n****************************"
+	echo "*** ERROR: Invalid Usage ***"
+	echo "****************************"
+}
+
+listAllBuckets() {
+	curl ${BASE_URL}/buckets?buckets=true
+}
+
+list() {
+	case "$1" in
+		"buckets" )
+			listAllBuckets
+			;;
+		* )
+			printInvalidUsage
+			printUsage
+			;;
+	esac	
+}
+
+case "$1" in
+	"help" )
+		printUsage
+		;;
+	"list" )
+		shift
+		list $*
+		;;
+	* )
+		printUsage
+		;;
+esac
