@@ -7,18 +7,33 @@ BASE_URL="http://${RIAK_HOST}:${RIAK_PORT}"
 
 printUsage() {
 	echo  "\nUsage:"
-	echo  "  riakcli list buckets            -> Lists all the buckets available in riak"
-	echo  "  riakcli help                    -> Displays this usage information"	
+	echo  "  riakcli list buckets                       -> Lists all the buckets available in riak"
+	echo  "  riakcli list keys [bucket-name]            -> Lists all keys in a given bucket"
+	echo  "  riakcli list object [bucket-name] [key]    -> Lists the object associated with a given key in a specified bucket"
+	echo  "  riakcli help                               -> Displays this usage information"	
 }
 
 printInvalidUsage() {
-	echo "\n****************************"
-	echo "*** ERROR: Invalid Usage ***"
-	echo "****************************"
+	echo "\n********************************************************"
+	echo "ERROR: Invalid Usage (wrong/missing command arguments)"
+	echo "********************************************************"
+
+	printUsage
 }
 
 listAllBuckets() {
 	curl ${BASE_URL}/buckets?buckets=true
+}
+
+listKeysInBucket() {
+	curl ${BASE_URL}/buckets/$1/keys?keys=true
+}
+
+listObject() {
+	BUCKET=$1
+	KEY=$2
+
+	curl ${BASE_URL}/riak/${BUCKET}/${KEY}
 }
 
 list() {
@@ -26,9 +41,22 @@ list() {
 		"buckets" )
 			listAllBuckets
 			;;
+		"keys" )
+			if [ -z "$2" ]; then
+				printInvalidUsage
+				exit	
+			fi
+			listKeysInBucket $2
+			;;
+		"object" )
+			if [[ -z "$2" ||  -z "$3" ]]; then
+				printInvalidUsage
+				exit	
+			fi
+			listObject $2 $3			
+			;;
 		* )
-			printInvalidUsage
-			printUsage
+			printInvalidUsage			
 			;;
 	esac	
 }
