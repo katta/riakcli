@@ -1,11 +1,14 @@
 #! /usr/bin/env sh
 
 printUsage() {
-	echo  "\nUsage:"
+	echo  "\nUsage:\n"
 	echo  "  riakcli list buckets                       -> Lists all the buckets available in riak"
 	echo  "  riakcli list keys [bucket-name]            -> Lists all keys in a given bucket"
 	echo  "  riakcli list object [bucket-name] [key]    -> Lists the object associated with a given key in a specified bucket"
+	echo  ""
 	echo  "  riakcli delete bucket [bucket-name]        -> Deletes all objects in a specified bucket"
+	echo  "  riakcli delete object [bucket-name] [key]  -> Deletes an object in a given bucket"
+	echo  ""
 	echo  "  riakcli help                               -> Displays this usage information"	
 }
 
@@ -37,8 +40,15 @@ deleteBucket() {
 	
 	for KEY in `listKeysInBucket ${BUCKET} | sed -e 's/^.*\[//g' -e 's/"//g' -e 's/\]\}//g' -e 's/,/\'$'\n/g'`;
     do
-        curl -XDELETE http://${RIAK_BASE_URL}/riak/${BUCKET}/${KEY} > /dev/null;
+        deleteObject ${BUCKET} ${KEY}
     done;
+}
+
+deleteObject() {
+	BUCKET=$1
+	KEY=$2
+
+	curl -XDELETE ${RIAK_BASE_URL}/riak/${BUCKET}/${KEY};
 }
 
 list() {
@@ -74,6 +84,13 @@ delete() {
 				exit	
 			fi
 			deleteBucket $2
+			;;
+		"object" )
+			if [[ -z "$2" ||  -z "$3" ]]; then
+				printInvalidUsage
+				exit	
+			fi
+			deleteObject $2 $3		
 			;;
 		* )
 			printInvalidUsage			
