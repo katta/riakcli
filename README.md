@@ -31,6 +31,10 @@ cd riakcli
 
 > __After setting it up, riakcli is available @ /usr/local/bin/riakcli (make sure it is added to your PATH)__
 
+### Configuration
+
+By default, this tool connects to RIAK @ localhost:8098. To change this, edit __~/.riakclirc__ and change the appropriate configuration. (__~/.riakclirc__ is created by installation script automatically)
+
 ### Whats coming later ?
 
 * Auto completion of sub commands
