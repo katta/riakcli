@@ -1,16 +1,23 @@
-riakcli
-=======
 
-Command line utility for querying Riak database
+Command line utility to interact with RIAK distributed database
 
-TODO
-====
+### What can I do with this ?
 
-* Setup script - to add __riakcli__ on to path
-* Bash autocompletion script
-* Riak Commands
- * Delete Object
- * Update Object
- * Delete all objects in a bucket
- * Delete a bucket
- * Delete all buckets
+* List all the buckets available in a given RIAK instance
+* List all keys in a given bucket
+* Read an object given a key under a given bucket
+* Delete the bucket
+* More to come..
+
+### How do I set it up ?
+
+```bash
+
+cd riakcli      
+./install.sh
+```
+
+### Whats coming later ?
+
+* Auto completion of sub commands
+* Updating RIAK objects
