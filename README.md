@@ -33,9 +33,15 @@ cd riakcli
 
 ### Configuration
 
-By default, this tool connects to RIAK @ localhost:8098. To change this, edit __~/.riakclirc__ and change the appropriate configuration. (__~/.riakclirc__ is created by installation script automatically)
+By default, this tool connects to RIAK @ __http://localhost:8098__. 
+If you want to connect to RIAK on other machine, edit __~/.riakclirc__ and change the appropriate configuration.
+
+Please note __~/.riakclirc__ is created by installation script automatically.
 
 ### Whats coming later ?
 
+* Adding/Updating RIAK objects / buckets
 * Auto completion of sub commands
-* Updating RIAK objects
+* Support for HTTPS
+* Support for authentication enabled RIAK
+
