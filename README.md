@@ -24,7 +24,7 @@ Usage:
 ### How do I set it up ?
 
 ```bash
-https://github.com/katta/riakcli.git
+git clone https://github.com/katta/riakcli.git
 cd riakcli      
 ./install.sh
 ```
