@@ -14,10 +14,15 @@ Here you go !!
 
 ```
 Usage:
+
   riakcli list buckets                       -> Lists all the buckets available in riak
   riakcli list keys [bucket-name]            -> Lists all keys in a given bucket
   riakcli list object [bucket-name] [key]    -> Lists the object associated with a given key in a specified bucket
+
   riakcli delete bucket [bucket-name]        -> Deletes all objects in a specified bucket
+  riakcli delete object [bucket-name] [key]  -> Deletes an object in a given bucket
+
+  riakcli ping                               -> Connects to RIAK instance for status
   riakcli help                               -> Displays this usage information
 ```
 
@@ -44,4 +49,5 @@ Please note __~/.riakclirc__ is created by installation script automatically.
 * Auto completion of sub commands
 * Support for HTTPS
 * Support for authentication enabled RIAK
+* Support for updating objects with headers
 
