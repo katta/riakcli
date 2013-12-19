@@ -9,6 +9,7 @@ printUsage() {
 	echo  "  riakcli delete bucket [bucket-name]        -> Deletes all objects in a specified bucket"
 	echo  "  riakcli delete object [bucket-name] [key]  -> Deletes an object in a given bucket"
 	echo  ""
+	echo  "  riakcli ping                               -> Connects to RIAK instance for status"
 	echo  "  riakcli help                               -> Displays this usage information"	
 }
 
@@ -98,6 +99,10 @@ delete() {
 	esac
 }
 
+ping() {
+	curl ${RIAK_BASE_URL}/ping
+}
+
 __init__() {
 
 	RIAK_HOST="localhost"
@@ -114,6 +119,9 @@ __init__() {
 	case "$1" in
 		"help" )
 			printUsage
+			;;
+		"ping" )
+			ping
 			;;
 		"list" )
 			shift
