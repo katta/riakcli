@@ -10,6 +10,7 @@ printUsage() {
 	echo  "  riakcli list buckets                       -> Lists all the buckets available in riak"
 	echo  "  riakcli list keys [bucket-name]            -> Lists all keys in a given bucket"
 	echo  "  riakcli list object [bucket-name] [key]    -> Lists the object associated with a given key in a specified bucket"
+	echo  "  riakcli delete bucket [bucket-name]        -> Deletes all objects in a specified bucket"
 	echo  "  riakcli help                               -> Displays this usage information"	
 }
 
@@ -22,18 +23,27 @@ printInvalidUsage() {
 }
 
 listAllBuckets() {
-	curl ${BASE_URL}/buckets?buckets=true
+	curl -s ${BASE_URL}/buckets?buckets=true
 }
 
 listKeysInBucket() {
-	curl ${BASE_URL}/buckets/$1/keys?keys=true
+	curl -s ${BASE_URL}/buckets/$1/keys?keys=true
 }
 
 listObject() {
 	BUCKET=$1
 	KEY=$2
 
-	curl ${BASE_URL}/riak/${BUCKET}/${KEY}
+	curl -s ${BASE_URL}/riak/${BUCKET}/${KEY}
+}
+
+deleteBucket() {
+	BUCKET=$1
+	
+	for KEY in `listKeysInBucket ${BUCKET} | sed -e 's/^.*\[//g' -e 's/"//g' -e 's/\]\}//g' -e 's/,/\'$'\n/g'`;
+    do
+        curl -s -XDELETE http://${RIAK_HOST}:${RIAK_PORT}/riak/${BUCKET}/${KEY} > /dev/null;
+    done;
 }
 
 list() {
@@ -61,6 +71,21 @@ list() {
 	esac	
 }
 
+delete() {
+	case "$1" in
+		"bucket" )
+			if [ -z "$2" ]; then
+				printInvalidUsage
+				exit	
+			fi
+			deleteBucket $2
+			;;
+		* )
+			printInvalidUsage			
+			;;			
+	esac
+}
+
 case "$1" in
 	"help" )
 		printUsage
@@ -68,6 +93,10 @@ case "$1" in
 	"list" )
 		shift
 		list $*
+		;;
+	"delete" )
+		shift
+		delete $*
 		;;
 	* )
 		printUsage
