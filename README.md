@@ -48,7 +48,6 @@ Please note __~/.riakclirc__ is created by installation script automatically.
 
 ### Whats coming later ?
 
-* Auto completion of sub commands
 * Support for HTTPS
 * Support for authentication enabled RIAK
 * Support for updating objects with headers
