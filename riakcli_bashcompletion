@@ -1,0 +1,36 @@
+_riakcli() {
+	local cur prev opts base
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    opts="list get put delete flush ping help"
+
+    case "${prev}" in
+		list)
+		    local list_opts="keys buckets"
+		    COMPREPLY=( $(compgen -W "${list_opts}" -- ${cur}) )
+	        return 0
+	        ;;
+        get | put)			
+		    local get_put_opts="object"
+		    COMPREPLY=( $(compgen -W "${get_put_opts}" -- ${cur}) )
+	        return 0
+	        ;;
+		delete)
+		    local list_opts="bucket object"
+		    COMPREPLY=( $(compgen -W "${list_opts}" -- ${cur}) )
+	        return 0
+	        ;;
+	    flush | ping | help)
+	    	return 0
+	    	;;	       
+	    *)
+	        ;;
+    esac
+
+    COMPREPLY=($(compgen -W "${opts}" -- ${cur}))  
+    return 0
+}
+
+complete -F _riakcli riakcli
