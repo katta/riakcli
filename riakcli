@@ -4,8 +4,8 @@ printUsage() {
 	echo  "\nUsage:\n"
 	echo  "  riakcli list buckets                                   -> Lists all the buckets available in RIAK"
 	echo  "  riakcli list keys [bucket-name]                        -> Lists all keys in a given bucket"
-	echo  "  riakcli list object [bucket-name] [key]                -> Lists the object associated with a given key in a specified bucket"
 	echo  ""
+	echo  "  riakcli get object [bucket-name] [key]                -> Lists the object associated with a given key in a specified bucket"	
 	echo  "  riakcli put object [bucket-name] [key] [object-json]   -> Creates/Updates an object for a given key in a specified bucket"
 	echo  ""
 	echo  "  riakcli delete bucket [bucket-name]                    -> Deletes all objects in a specified bucket"
@@ -112,6 +112,14 @@ list() {
 			fi
 			listKeysInBucket $2
 			;;
+		* )
+			printInvalidUsage			
+			;;
+	esac	
+}
+
+get() {
+	case "$1" in
 		"object" )
 			if [[ -z "$2" ||  -z "$3" ]]; then
 				printInvalidUsage
@@ -174,6 +182,10 @@ __init__() {
 		"put" )
 			shift
 			put $*
+			;;
+		"get" )
+			shift
+			get $*
 			;;
 		"list" )
 			shift
