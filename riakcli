@@ -24,7 +24,16 @@ printInvalidUsage() {
 	printUsage
 }
 
-cput() {
+checkForArgs() {
+	ARGS_REQUIRED=$1
+	shift
+	if [ $# -lt $ARGS_REQUIRED ]; then
+		printInvalidUsage
+		exit	
+	fi
+}
+
+cput() {	
 	local URL=$1
 	local DATA=$2
 	curl -XPUT -H "Content-Type:application/json" ${URL} -d ${DATA}
@@ -40,10 +49,14 @@ listAllBuckets() {
 }
 
 listKeysInBucket() {
-	curl ${RIAK_BASE_URL}/buckets/$1/keys?keys=true
+	checkForArgs 1 $*
+	local BUCKET=$1
+	curl ${RIAK_BASE_URL}/buckets/${BUCKET}/keys?keys=true
 }
 
-listObject() {
+getObject() {
+	checkForArgs 2 $*
+
 	local BUCKET=$1
 	local KEY=$2
 
@@ -51,6 +64,7 @@ listObject() {
 }
 
 deleteBucket() {
+	checkForArgs 1 $*
 	local BUCKET=$1
 	
 	for KEY in `listKeysInBucket ${BUCKET} | sed -e 's/^.*\[//g' -e 's/"//g' -e 's/\]\}//g' -e 's/,/\'$'\n/g'`;
@@ -60,6 +74,8 @@ deleteBucket() {
 }
 
 deleteObject() {
+	checkForArgs 2 $*
+
 	local BUCKET=$1
 	local KEY=$2
 
@@ -67,14 +83,12 @@ deleteObject() {
 }
 
 putObject() {	
-	if [ $# -lt 3 ]; then
-		printInvalidUsage
-		exit	
-	fi
-	
+	checkForArgs 3 $*
+
 	local BUCKET=$1
 	local KEY=$2
 	shift 2	
+
 	local OBJECT=$* 
 	OBJECT=`echo ${OBJECT} | sed "s/ //g"`
 	cput ${RIAK_BASE_URL}/riak/${BUCKET}/${KEY} ${OBJECT}
@@ -106,11 +120,8 @@ list() {
 			listAllBuckets
 			;;
 		"keys" )
-			if [ -z "$2" ]; then
-				printInvalidUsage
-				exit	
-			fi
-			listKeysInBucket $2
+			shift			
+			listKeysInBucket $*
 			;;
 		* )
 			printInvalidUsage			
@@ -121,11 +132,8 @@ list() {
 get() {
 	case "$1" in
 		"object" )
-			if [[ -z "$2" ||  -z "$3" ]]; then
-				printInvalidUsage
-				exit	
-			fi
-			listObject $2 $3			
+			shift 			
+			getObject $*
 			;;
 		* )
 			printInvalidUsage			
@@ -136,18 +144,12 @@ get() {
 delete() {
 	case "$1" in
 		"bucket" )
-			if [ -z "$2" ]; then
-				printInvalidUsage
-				exit	
-			fi
-			deleteBucket $2
+			shift
+			deleteBucket $*
 			;;
 		"object" )
-			if [[ -z "$2" ||  -z "$3" ]]; then
-				printInvalidUsage
-				exit	
-			fi
-			deleteObject $2 $3		
+			shift
+			deleteObject $*
 			;;
 		* )
 			printInvalidUsage			
