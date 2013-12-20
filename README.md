@@ -15,16 +15,18 @@ Here you go !!
 ```
 Usage:
 
-  riakcli list buckets                       -> Lists all the buckets available in RIAK
-  riakcli list keys [bucket-name]            -> Lists all keys in a given bucket
-  riakcli list object [bucket-name] [key]    -> Lists the object associated with a given key in a specified bucket
+  riakcli list buckets                                   -> Lists all the buckets available in RIAK
+  riakcli list keys [bucket-name]                        -> Lists all keys in a given bucket
 
-  riakcli delete bucket [bucket-name]        -> Deletes all objects in a specified bucket
-  riakcli delete object [bucket-name] [key]  -> Deletes an object in a given bucket
-  riakcli flush                              -> Deletes all the buckets in RIAK
-  
-  riakcli ping                               -> Connects to RIAK instance for status
-  riakcli help                               -> Displays this usage information
+  riakcli get object [bucket-name] [key]                 -> Gets the object associated with a given key in a specified bucket
+  riakcli put object [bucket-name] [key] [object-json]   -> Creates/Updates an object for a given key in a specified bucket
+
+  riakcli delete bucket [bucket-name]                    -> Deletes all objects in a specified bucket
+  riakcli delete object [bucket-name] [key]              -> Deletes an object in a given bucket
+  riakcli flush                                          -> Deletes all the buckets in RIAK
+
+  riakcli ping                                           -> Connects to RIAK instance for status
+  riakcli help                                           -> Displays this usage information
 ```
 
 ### How do I set it up ?

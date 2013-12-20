@@ -5,7 +5,7 @@ printUsage() {
 	echo  "  riakcli list buckets                                   -> Lists all the buckets available in RIAK"
 	echo  "  riakcli list keys [bucket-name]                        -> Lists all keys in a given bucket"
 	echo  ""
-	echo  "  riakcli get object [bucket-name] [key]                -> Lists the object associated with a given key in a specified bucket"	
+	echo  "  riakcli get object [bucket-name] [key]                 -> Gets the object associated with a given key in a specified bucket"	
 	echo  "  riakcli put object [bucket-name] [key] [object-json]   -> Creates/Updates an object for a given key in a specified bucket"
 	echo  ""
 	echo  "  riakcli delete bucket [bucket-name]                    -> Deletes all objects in a specified bucket"
