@@ -18,17 +18,24 @@ printUsage() {
 
 printInvalidUsage() {
 	echo "\n********************************************************"
-	echo "ERROR: Invalid Usage (wrong/missing command arguments)"
+	echo "ERROR: Invalid Usage "		
 	echo "********************************************************"
 
 	printUsage
 }
 
+### HELPER FUNCTIONS ###
 checkForArgs() {
 	ARGS_REQUIRED=$1
-	shift
-	if [ $# -lt $ARGS_REQUIRED ]; then
-		printInvalidUsage
+	MESSAGE=$2
+	shift 2
+	if [ $# -lt $ARGS_REQUIRED ]; then		
+		echo "\n********************************************************"
+		echo "ERROR: Insufficient arguments"
+		echo "ERROR: Command: ${MESSAGE}"
+		echo "********************************************************"
+
+		printUsage
 		exit	
 	fi
 }
@@ -43,19 +50,23 @@ cdel() {
 	local URL=$1
 	curl -XDELETE ${URL}
 }
+########################
+ping() {
+	curl ${RIAK_BASE_URL}/ping
+}
 
 listAllBuckets() {
 	curl ${RIAK_BASE_URL}/buckets?buckets=true
 }
 
 listKeysInBucket() {
-	checkForArgs 1 $*
+	checkForArgs 1 "riakcli list keys [bucket-name]" $*
 	local BUCKET=$1
 	curl ${RIAK_BASE_URL}/buckets/${BUCKET}/keys?keys=true
 }
 
 getObject() {
-	checkForArgs 2 $*
+	checkForArgs 2 "riakcli get object [bucket-name] [key]" $*
 
 	local BUCKET=$1
 	local KEY=$2
@@ -63,27 +74,8 @@ getObject() {
 	curl ${RIAK_BASE_URL}/riak/${BUCKET}/${KEY}
 }
 
-deleteBucket() {
-	checkForArgs 1 $*
-	local BUCKET=$1
-	
-	for KEY in `listKeysInBucket ${BUCKET} | sed -e 's/^.*\[//g' -e 's/"//g' -e 's/\]\}//g' -e 's/,/\'$'\n/g'`;
-    do
-        deleteObject ${BUCKET} ${KEY}
-    done;
-}
-
-deleteObject() {
-	checkForArgs 2 $*
-
-	local BUCKET=$1
-	local KEY=$2
-
-	cdel ${RIAK_BASE_URL}/riak/${BUCKET}/${KEY};
-}
-
 putObject() {	
-	checkForArgs 3 $*
+	checkForArgs 3 "riakcli put object [bucket-name] [key] [object-json]"$*
 
 	local BUCKET=$1
 	local KEY=$2
@@ -94,6 +86,25 @@ putObject() {
 	cput ${RIAK_BASE_URL}/riak/${BUCKET}/${KEY} ${OBJECT}
 }
 
+deleteBucket() {
+	checkForArgs 1 "riakcli delete bucket [bucket-name]" $*
+	local BUCKET=$1
+	
+	for KEY in `listKeysInBucket ${BUCKET} | sed -e 's/^.*\[//g' -e 's/"//g' -e 's/\]\}//g' -e 's/,/\'$'\n/g'`;
+    do
+        deleteObject ${BUCKET} ${KEY}
+    done;
+}
+
+deleteObject() {
+	checkForArgs 2 "riakcli delete object [bucket-name] [key]" $*
+
+	local BUCKET=$1
+	local KEY=$2
+
+	cdel ${RIAK_BASE_URL}/riak/${BUCKET}/${KEY};
+}
+
 flush() {
 	for BUCKET in  `listAllBuckets | cut -d ':' -f2 | sed -e 's/^.*\[//g' -e 's/"//g' -e 's/\]\}//g' -e 's/,/\'$'\n/g'`;
 	do
@@ -102,17 +113,8 @@ flush() {
 	done;
 }
 
-put() {
-	case "$1" in
-		"object" )
-			shift
-			putObject $*
-			;;
-		* )
-			printInvalidUsage			
-			;;
-	esac
-}
+### TOP LEVEL COMMANDS BEGIN ###
+
 
 list() {
 	case "$1" in
@@ -141,6 +143,18 @@ get() {
 	esac	
 }
 
+put() {
+	case "$1" in
+		"object" )
+			shift
+			putObject $*
+			;;
+		* )
+			printInvalidUsage			
+			;;
+	esac
+}
+
 delete() {
 	case "$1" in
 		"bucket" )
@@ -157,9 +171,7 @@ delete() {
 	esac
 }
 
-ping() {
-	curl ${RIAK_BASE_URL}/ping
-}
+### TOP LEVEL COMMANDS END ###
 
 __init__() {
 
