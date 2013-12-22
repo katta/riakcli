@@ -25,7 +25,7 @@ _riakcli() {
 	    flush | ping | help)
 	    	return 0
 	    	;;	       
-		object)			
+		object | keys | bucket)			
 			local bucket_opts=`riakcli list buckets | cut -d ':' -f2 | sed -e 's/^.*\[//g' -e 's/"//g' -e 's/\]\}//g' -e 's/,/ /g'`
 		    COMPREPLY=( $(compgen -W "${bucket_opts}" -- ${cur}) )
 	        return 0					
