@@ -55,8 +55,8 @@ ping() {
 	curl ${RIAK_BASE_URL}/ping
 }
 
-listAllBuckets() {
-	curl ${RIAK_BASE_URL}/buckets?buckets=true
+listBuckets() {
+	curl -s ${RIAK_BASE_URL}/buckets?buckets=true
 }
 
 listKeysInBucket() {
@@ -106,7 +106,7 @@ deleteObject() {
 }
 
 flush() {
-	for BUCKET in  `listAllBuckets | cut -d ':' -f2 | sed -e 's/^.*\[//g' -e 's/"//g' -e 's/\]\}//g' -e 's/,/\'$'\n/g'`;
+	for BUCKET in  `listBuckets | cut -d ':' -f2 | sed -e 's/^.*\[//g' -e 's/"//g' -e 's/\]\}//g' -e 's/,/\'$'\n/g'`;
 	do
 		echo "Deleting bucket - ${BUCKET}"
 		deleteBucket ${BUCKET}
@@ -119,7 +119,7 @@ flush() {
 list() {
 	case "$1" in
 		"buckets" )			
-			listAllBuckets
+			listBuckets
 			;;
 		"keys" )
 			shift			

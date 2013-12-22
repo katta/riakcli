@@ -12,7 +12,7 @@ _riakcli() {
 		    COMPREPLY=( $(compgen -W "${list_opts}" -- ${cur}) )
 	        return 0
 	        ;;
-        get | put)			
+        get | put)
 		    local get_put_opts="object"
 		    COMPREPLY=( $(compgen -W "${get_put_opts}" -- ${cur}) )
 	        return 0
@@ -25,6 +25,11 @@ _riakcli() {
 	    flush | ping | help)
 	    	return 0
 	    	;;	       
+		object)			
+			local bucket_opts=`riakcli list buckets | cut -d ':' -f2 | sed -e 's/^.*\[//g' -e 's/"//g' -e 's/\]\}//g' -e 's/,/ /g'`
+		    COMPREPLY=( $(compgen -W "${bucket_opts}" -- ${cur}) )
+	        return 0					
+			;;
 	    *)
 	        ;;
     esac
