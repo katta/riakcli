@@ -54,7 +54,7 @@ Please note __~/.riakclirc__ is created by installation script automatically.
 * Support for updating objects with headers
 
 
-### LICENSE
+### License
 
 Copyright 2013 Srivatsa Katta
 
