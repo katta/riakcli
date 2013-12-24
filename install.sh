@@ -18,5 +18,4 @@ elif [[ "${platform}" == 'Darwin' ]]; then
 fi
 
 cp -f riakcli_bashcompletion ${bash_completion_dir}/riakcli_bashcompletion
-source ${bash_completion_dir}/riakcli_bashcompletion
-echo "INFO: Installing bash_completion for riakcli in to ${bash_completion_dir}"
+echo "INFO: Installing bash_completion for riakcli in to ${bash_completion_dir}. Make sure it is sourced using 'source  ${bash_completion_dir}/riakcli_bashcompletion' command"
