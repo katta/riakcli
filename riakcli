@@ -1,7 +1,9 @@
 #! /usr/bin/env sh
 
 printUsage() {
-	echo  "\nUsage:\n"
+	echo  ""
+	echo  "Usage:"
+	echo  ""
 	echo  "  riakcli list buckets                                   -> Lists all the buckets available in RIAK"
 	echo  "  riakcli list keys [bucket-name]                        -> Lists all keys in a given bucket"
 	echo  ""
@@ -17,7 +19,8 @@ printUsage() {
 }
 
 printInvalidUsage() {
-	echo "\n********************************************************"
+	echo  ""
+	echo "********************************************************"
 	echo "ERROR: Invalid Usage "		
 	echo "********************************************************"
 
