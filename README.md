@@ -50,6 +50,8 @@ Please note __~/.riakclirc__ is created by installation script automatically.
 
 ### Whats coming later ?
 
+* Search by secondary indices
+* Search by full text queries
 * Support for HTTPS
 * Support for authentication enabled RIAK
 * Support for updating objects with headers
