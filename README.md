@@ -35,7 +35,8 @@ Usage:
 ```bash
 git clone https://github.com/katta/riakcli.git
 cd riakcli      
-./install.sh
+git checkout v0.1 ## Replace v0.1 with any release version you would like to install
+./install.sh      ## After installation, source the riakcli_bashcompletion script as mentioned in installation logs
 ```
 
 > __After setting it up, riakcli is available @ /usr/local/bin/riakcli (make sure it is added to your PATH)__
