@@ -31,7 +31,7 @@ Usage:
   riakcli help                                           -> Displays this usage information
 ```
 
-### How do I set it up ?
+### How do I get started ?
 
 ```bash
 git clone https://github.com/katta/riakcli.git
