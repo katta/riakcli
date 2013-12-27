@@ -5,6 +5,7 @@ Command line utility to interact with RIAK distributed database
 * List all the buckets available in a given RIAK instance
 * List all keys in a given bucket
 * Read an object given a key under a given bucket
+* Create or update an object for a given key
 * Delete riak objects and buckets
 * Tabbing gives you auto complete support for sub commands
 * More to come..
