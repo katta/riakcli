@@ -43,29 +43,34 @@ checkForArgs() {
 	fi
 }
 
+crl() {
+	curl -w "\n" $*
+}
+
 cput() {	
 	local URL=$1
 	local DATA=$2
-	curl -XPUT -H "Content-Type:application/json" ${URL} -d ${DATA}
+	crl -XPUT -H "Content-Type:application/json" ${URL} -d ${DATA}
 }
 
 cdel() {
 	local URL=$1
-	curl -XDELETE ${URL}
+	crl -XDELETE ${URL}
 }
+
 ########################
 ping() {
-	curl ${RIAK_BASE_URL}/ping
+	crl ${RIAK_BASE_URL}/ping
 }
 
 listBuckets() {
-	curl -s ${RIAK_BASE_URL}/buckets?buckets=true
+	crl -s ${RIAK_BASE_URL}/buckets?buckets=true
 }
 
 listKeysInBucket() {
 	checkForArgs 1 "riakcli list keys [bucket-name]" $*
 	local BUCKET=$1
-	curl ${RIAK_BASE_URL}/buckets/${BUCKET}/keys?keys=true
+	crl ${RIAK_BASE_URL}/buckets/${BUCKET}/keys?keys=true
 }
 
 getObject() {
@@ -74,7 +79,7 @@ getObject() {
 	local BUCKET=$1
 	local KEY=$2
 
-	curl ${RIAK_BASE_URL}/riak/${BUCKET}/${KEY}
+	crl ${RIAK_BASE_URL}/riak/${BUCKET}/${KEY}
 }
 
 putObject() {	
