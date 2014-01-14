@@ -4,7 +4,7 @@ _riakcli() {
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
-    opts="list get put delete flush ping help"
+    opts="list search get put delete flush ping help"
 
     case "${prev}" in
 		list)
@@ -18,14 +18,19 @@ _riakcli() {
 	        return 0
 	        ;;
 		delete)
-		    local list_opts="bucket object"
-		    COMPREPLY=( $(compgen -W "${list_opts}" -- ${cur}) )
+		    local delete_opts="bucket object"
+		    COMPREPLY=( $(compgen -W "${delete_opts}" -- ${cur}) )
 	        return 0
 	        ;;
 	    flush | ping | help)
 	    	return 0
 	    	;;	       
-		object | keys | bucket)			
+	    search )
+	    	local search_opts="by_index"
+		    COMPREPLY=( $(compgen -W "${search_opts}" -- ${cur}) )
+	        return 0
+	        ;;
+		object | keys | bucket | by_index )			
 			local bucket_opts=`riakcli list buckets | cut -d ':' -f2 | sed -e 's/^.*\[//g' -e 's/"//g' -e 's/\]\}//g' -e 's/,/ /g'`
 		    COMPREPLY=( $(compgen -W "${bucket_opts}" -- ${cur}) )
 	        return 0					

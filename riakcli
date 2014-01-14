@@ -9,6 +9,8 @@ printUsage() {
 	echo  ""
 	echo  "  riakcli get object [bucket-name] [key]                 -> Gets the object associated with a given key in a specified bucket"	
 	echo  "  riakcli put object [bucket-name] [key] [object-json]   -> Creates/Updates an object for a given key in a specified bucket"
+	echo  "  riakcli search by_index [bucket-name] [index-name] [index-value]"
+	echo  "                                                         -> Searches given value by secondary index in a specified bucket"
 	echo  ""
 	echo  "  riakcli delete bucket [bucket-name]                    -> Deletes all objects in a specified bucket"
 	echo  "  riakcli delete object [bucket-name] [key]              -> Deletes an object in a given bucket"
@@ -83,7 +85,7 @@ getObject() {
 }
 
 putObject() {	
-	checkForArgs 3 "riakcli put object [bucket-name] [key] [object-json]"$*
+	checkForArgs 3 "riakcli put object [bucket-name] [key] [object-json]" $*
 
 	local BUCKET=$1
 	local KEY=$2
@@ -92,6 +94,15 @@ putObject() {
 	local OBJECT=$* 
 	OBJECT=`echo ${OBJECT} | sed "s/ //g"`
 	cput ${RIAK_BASE_URL}/riak/${BUCKET}/${KEY} ${OBJECT}
+}
+
+searchByIndex() {
+	checkForArgs 3 "search by_index [bucket-name] [index-name] [index-value]" $*	
+	local BUCKET=$1
+	local INDEX=$2
+	local VALUE=$3
+
+	crl ${RIAK_BASE_URL}/buckets/${BUCKET}/index/${INDEX}_bin/${VALUE}
 }
 
 deleteBucket() {
@@ -151,6 +162,18 @@ get() {
 	esac	
 }
 
+search() {
+	case "$1" in
+		"by_index" )
+			shift
+			searchByIndex $*
+			;;
+		* ) 
+			printInvalidUsage			
+			;;
+	esac
+}
+
 put() {
 	case "$1" in
 		"object" )
@@ -208,6 +231,10 @@ __init__() {
 		"get" )
 			shift
 			get $*
+			;;
+		"search" )
+			shift
+			search $*
 			;;
 		"list" )
 			shift
