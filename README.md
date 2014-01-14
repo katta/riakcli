@@ -61,7 +61,7 @@ Please note __~/.riakclirc__ is created by installation script automatically.
 
 ### Latest release
 
-`v0.2`
+`v0.3`
 
 
 ### License
