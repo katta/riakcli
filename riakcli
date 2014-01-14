@@ -46,7 +46,7 @@ checkForArgs() {
 }
 
 crl() {
-	curl -w "\n" $*
+	curl -sS -w "\n" $*
 }
 
 cput() {	
@@ -72,7 +72,7 @@ listBuckets() {
 listKeysInBucket() {
 	checkForArgs 1 "riakcli list keys [bucket-name]" $*
 	local BUCKET=$1
-	crl ${RIAK_BASE_URL}/buckets/${BUCKET}/keys?keys=true
+	crl ${RIAK_BASE_URL}/buckets/${BUCKET}/keys?keys=true 
 }
 
 getObject() {
@@ -132,6 +132,10 @@ flush() {
 	done;
 }
 
+valuesFromJson() {
+       sed -e 's/^.*\[//g' -e 's/"//g' -e 's/\]\}//g' -e 's/,/\'$'\n/g'
+}
+
 ### TOP LEVEL COMMANDS BEGIN ###
 
 
@@ -142,7 +146,7 @@ list() {
 			;;
 		"keys" )
 			shift			
-			listKeysInBucket $*
+			listKeysInBucket $* | valuesFromJson
 			;;
 		* )
 			printInvalidUsage			
@@ -166,7 +170,7 @@ search() {
 	case "$1" in
 		"by_index" )
 			shift
-			searchByIndex $*
+			searchByIndex $* | valuesFromJson
 			;;
 		* ) 
 			printInvalidUsage			
