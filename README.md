@@ -22,6 +22,8 @@ Usage:
 
   riakcli get object [bucket-name] [key]                 -> Gets the object associated with a given key in a specified bucket
   riakcli put object [bucket-name] [key] [object-json]   -> Creates/Updates an object for a given key in a specified bucket
+  riakcli search by_index [bucket-name] [index-name] [index-value]
+                                                         -> Searches given value by secondary index in a specified bucket
 
   riakcli delete bucket [bucket-name]                    -> Deletes all objects in a specified bucket
   riakcli delete object [bucket-name] [key]              -> Deletes an object in a given bucket
@@ -56,6 +58,10 @@ Please note __~/.riakclirc__ is created by installation script automatically.
 * Support for HTTPS
 * Support for authentication enabled RIAK
 * Support for updating objects with headers
+
+### Latest release
+
+`v0.2`
 
 
 ### License
